@@ -13,7 +13,7 @@ tqdm
 ![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey?logo=flask)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?logo=tensorflow)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?logo=opencv)
-![License](https://img.shields.io/github/license/yourusername/yourrepo?color=blue)
+![License](hthttps://github.com/VXGN/Kana-classifier-v2?color=blue)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)
 
 <p align="center">
