@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoitsuKa 🦉 Katakana Classifier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-section">
+            <div>
+                <div class="logo-text">ドカ</div>
+                <div class="logo-sub">DoKa</div>
+            </div>
+        </div>
+        <div class="header-badge">
+            <span>🎌</span>
+            <span>Katakana Classifier</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="card">
+            <div class="card-header">
+                <span>📷</span>
+                <span>Camera Feed</span>
+            </div>
+            <div class="card-body">
+                <div class="video-box">
+                    <video id="webcam" autoplay playsinline muted></video>
+                    <div class="video-overlay">
+                        <div class="scan-frame" id="scanFrame"></div>
+                    </div>
+
+                    <div class="camera-prompt" id="cameraPrompt">
+                        <button class="btn btn-green" id="startCameraBtn">
+                            📸 Enable Camera
+                        </button>
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn btn-green" id="detectBtn" disabled>
+                        ⚡ Detect
+                    </button>
+                    <button class="btn btn-orange" id="autoBtn">
+                        🔄 Auto
+                    </button>
+                </div>
+
+                <div class="status-bar">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span class="status-text" id="statusText">Click "Start Camera" to begin</span>
+                </div>
+
+                <div class="kana-grid">
+                    {% for cat in categories %}
+                    <div class="kana-tile">
+                        <div class="kana-char">{{ cat.kana }}</div>
+                        <div class="kana-name">{{ cat.romaji }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">
+                <span>📸</span>
+                <span>Captured Image</span>
+            </div>
+            <div class="card-body">
+                <div id="capturedArea">
+                    <div class="empty-state">
+                        <div class="empty-owl">📷</div>
+                        <div class="empty-text">
+                            No capture yet<br>
+                            <small style="opacity:0.6">Click Detect to capture</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card results-card">
+            <div class="card-header">
+                <span>🎯</span>
+                <span>Result</span>
+            </div>
+            <div class="card-body">
+                <div id="resultArea">
+                    <div class="empty-state">
+                        <div class="empty-owl">🦉</div>
+                        <div class="empty-text">
+                            Show me a katakana!<br>
+                            <small style="opacity:0.6">シ ツ ン ソ ノ メ</small>
+                        </div>
+                    </div>
+                </div>
+                <div id="confList" class="conf-list hidden"></div>
+            </div>
+        </section>
+    </main>
+
+    <canvas id="captureCanvas"></canvas>
+
+    <footer class="footer">
+        <p><span>DoitsuKa</span> (ドイツカ) — "Doitsu No Kana?" Which Kana is it?</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

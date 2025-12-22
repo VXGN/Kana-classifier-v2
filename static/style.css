@@ -1,0 +1,512 @@
+/* DoitsuKa Duolingo-style Katakana Classifier CSS */
+:root {
+    --duo-green: #58cc02;
+    --duo-green-light: #89e219;
+    --duo-green-dark: #4caf00;
+    --duo-blue: #1cb0f6;
+    --duo-orange: #ff9600;
+    --duo-red: #ff4b4b;
+    --duo-purple: #ce82ff;
+    --duo-yellow: #ffc800;
+    --bg-dark: #131f24;
+    --bg-card: #1a2c34;
+    --bg-elevated: #233d4a;
+    --text-white: #ffffff;
+    --text-gray: #afafaf;
+    --border: #37464f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-dark);
+    min-height: 100vh;
+    color: var(--text-white);
+}
+
+.header {
+    background: var(--bg-card);
+    border-bottom: 2px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.owl {
+    font-size: 2.5rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.logo-text {
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--duo-green);
+}
+
+.logo-sub {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
+
+.header-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-elevated);
+    border-radius: 12px;
+    font-weight: 700;
+    color: var(--duo-green);
+}
+
+.main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .main {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.video-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 3px solid var(--border);
+}
+
+#webcam {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.scan-frame {
+    width: 130px;
+    height: 130px;
+    border: 3px dashed var(--duo-green);
+    border-radius: 16px;
+    opacity: 0.6;
+}
+
+.scan-frame.active {
+    animation: pulse-green 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4); }
+    50% { box-shadow: 0 0 0 15px rgba(88, 204, 2, 0); }
+}
+
+.camera-prompt {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    z-index: 10;
+}
+
+.camera-prompt.hidden {
+    display: none;
+}
+
+.prompt-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.prompt-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--duo-green);
+}
+
+.prompt-text {
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.prompt-tips {
+    background: var(--bg-elevated);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.prompt-tips p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+}
+
+.prompt-tips strong {
+    color: var(--duo-yellow);
+}
+
+.btn {
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-green {
+    background: var(--duo-green);
+    color: #fff;
+    box-shadow: 0 4px 0 var(--duo-green-dark);
+}
+
+.btn-green:hover {
+    filter: brightness(1.1);
+}
+
+.btn-green:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+.btn-green:disabled {
+    background: #3a4a4a;
+    box-shadow: 0 4px 0 #2a3a3a;
+    cursor: not-allowed;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--duo-blue);
+    border: 2px solid var(--duo-blue);
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: rgba(28, 176, 246, 0.1);
+}
+
+.btn-orange {
+    background: var(--duo-orange);
+    color: #fff;
+    box-shadow: 0 4px 0 #cc7700;
+}
+
+.btn-orange.active {
+    animation: glow-orange 1.5s ease-in-out infinite;
+}
+
+@keyframes glow-orange {
+    0%, 100% { box-shadow: 0 4px 0 #cc7700, 0 0 20px rgba(255, 150, 0, 0.4); }
+    50% { box-shadow: 0 4px 0 #cc7700, 0 0 30px rgba(255, 150, 0, 0.7); }
+}
+
+.btn-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-row .btn {
+    flex: 1;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-elevated);
+    border-radius: 10px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--duo-green);
+    animation: blink 1.5s ease-in-out infinite;
+}
+
+.status-dot.error { background: var(--duo-red); animation: none; }
+.status-dot.warning { background: var(--duo-yellow); }
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.status-text {
+    font-weight: 600;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.kana-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.kana-tile {
+    background: var(--bg-elevated);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 0.875rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.kana-tile:hover {
+    transform: translateY(-3px);
+    border-color: var(--duo-green);
+    background: rgba(88, 204, 2, 0.1);
+}
+
+.kana-char {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--duo-green);
+}
+
+.kana-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    margin-top: 0.25rem;
+}
+
+.results-card {
+    position: sticky;
+    top: 100px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-owl {
+    font-size: 5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.empty-text {
+    margin-top: 1rem;
+    color: var(--text-gray);
+    font-weight: 600;
+}
+
+.result-show {
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.result-kana {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 7rem;
+    font-weight: 700;
+    color: var(--duo-green);
+    line-height: 1;
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.result-romaji {
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-top: 0.5rem;
+}
+
+.result-confidence {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background: var(--bg-elevated);
+    border-radius: 50px;
+    font-weight: 700;
+    color: var(--duo-green);
+    border: 2px solid var(--duo-green);
+}
+
+.conf-list {
+    margin-top: 1.5rem;
+}
+
+.conf-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--bg-elevated);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.conf-item.top {
+    border-color: var(--duo-green);
+    background: rgba(88, 204, 2, 0.1);
+}
+
+.conf-kana {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    width: 45px;
+    text-align: center;
+    color: var(--duo-green);
+}
+
+.conf-info {
+    flex: 1;
+    margin: 0 0.75rem;
+}
+
+.conf-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.conf-bar {
+    height: 6px;
+    background: var(--bg-dark);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.conf-fill {
+    height: 100%;
+    background: var(--duo-green);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.conf-percent {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--duo-green);
+    min-width: 50px;
+    text-align: right;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}
+
+.footer span {
+    color: var(--duo-green);
+    font-weight: 800;
+}
+
+.hidden { display: none !important; }
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#captureCanvas { display: none; }
