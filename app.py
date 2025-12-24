@@ -1,9 +1,3 @@
-"""
-DoitsuKa - ドイツカ
-A Katakana Character Recognition Web App
-Doitsu No Kana? (Which Kana is it?)
-"""
-
 from flask import Flask, render_template, request, jsonify
 import numpy as np
 import cv2
@@ -13,9 +7,32 @@ import os
 
 app = Flask(__name__)
 
-# Load the trained model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'model', 'kana_classifier.h5')
-model = tf.keras.models.load_model(MODEL_PATH)
+# Model directory and available models
+MODEL_DIR = os.path.join(os.path.dirname(__file__), 'model')
+
+# Dictionary of available models with friendly names
+AVAILABLE_MODELS = {
+    'kana_classifier.h5': 'Default Model',
+    'kana_classifier(augmented).h5': 'Augmented Model',
+    'kana_classifier(the best).h5': 'Best Model'
+}
+
+# Current model state
+current_model_name = 'kana_classifier.h5'
+model = None
+
+def load_model(model_name):
+    """Load a model by filename"""
+    global model, current_model_name
+    model_path = os.path.join(MODEL_DIR, model_name)
+    if os.path.exists(model_path):
+        model = tf.keras.models.load_model(model_path)
+        current_model_name = model_name
+        return True
+    return False
+
+# Load default model on startup
+load_model(current_model_name)
 
 # Katakana categories
 CATEGORIES = [
@@ -88,9 +105,52 @@ def health():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'model_loaded': model is not None})
 
+@app.route('/models')
+def get_models():
+    """Get list of available models"""
+    models = []
+    for filename, display_name in AVAILABLE_MODELS.items():
+        model_path = os.path.join(MODEL_DIR, filename)
+        if os.path.exists(model_path):
+            models.append({
+                'filename': filename,
+                'display_name': display_name,
+                'active': filename == current_model_name
+            })
+    return jsonify({'models': models, 'current': current_model_name})
+
+@app.route('/switch_model', methods=['POST'])
+def switch_model():
+    """Switch to a different model"""
+    try:
+        data = request.get_json()
+        model_name = data.get('model')
+        
+        if not model_name:
+            return jsonify({'error': 'No model specified'}), 400
+        
+        if model_name not in AVAILABLE_MODELS:
+            return jsonify({'error': 'Invalid model'}), 400
+        
+        if load_model(model_name):
+            return jsonify({
+                'success': True,
+                'message': f'Switched to {AVAILABLE_MODELS[model_name]}',
+                'current': model_name
+            })
+        else:
+            return jsonify({'error': 'Failed to load model'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def get_ip():
+    return os.popen("ipconfig").read().split("IPv4 Address")[-1].split(":")[1].split()[0]
+
 if __name__ == '__main__':
     print("\n🎌 DoitsuKa - ドイツカ")
     print("Katakana Character Recognition")
     print("📱 Open: http://127.0.0.1:5000")
+    print(f"IP (local network): http://{get_ip()}:5000")
     print("💡 Tip: Use 127.0.0.1 for camera permissions!\n")
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
