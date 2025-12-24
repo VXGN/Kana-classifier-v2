@@ -11,10 +11,65 @@ const resultArea = document.getElementById('resultArea');
 const confList = document.getElementById('confList');
 const scanFrame = document.getElementById('scanFrame');
 const capturedArea = document.getElementById('capturedArea');
+const modelSelect = document.getElementById('modelSelect');
 
 let stream = null;
 let autoInterval = null;
 let isAuto = false;
+
+// Load available models
+async function loadModels() {
+    try {
+        const res = await fetch('/models');
+        const data = await res.json();
+        
+        modelSelect.innerHTML = '';
+        data.models.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.filename;
+            option.textContent = model.display_name;
+            option.selected = model.active;
+            modelSelect.appendChild(option);
+        });
+    } catch (err) {
+        console.error('Failed to load models:', err);
+        modelSelect.innerHTML = '<option value="">Error loading</option>';
+    }
+}
+
+// Switch model
+modelSelect.addEventListener('change', async () => {
+    const selectedModel = modelSelect.value;
+    if (!selectedModel) return;
+    
+    modelSelect.disabled = true;
+    setStatus('Switching model...', 'warning');
+    
+    try {
+        const res = await fetch('/switch_model', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: selectedModel })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            setStatus(`✓ ${data.message}`, 'ok');
+        } else {
+            setStatus('Failed to switch model: ' + data.error, 'error');
+            loadModels(); // Reload to reset selection
+        }
+    } catch (err) {
+        setStatus('Error switching model', 'error');
+        loadModels();
+    } finally {
+        modelSelect.disabled = false;
+    }
+});
+
+// Load models on page load
+loadModels();
 
 // Start Camera
 startCameraBtn.addEventListener('click', startCamera);
