@@ -1,3 +1,6 @@
+.env
+server.py
+
 # Notebooks (temporary/progress)
 UTS_progress.ipynb
 
